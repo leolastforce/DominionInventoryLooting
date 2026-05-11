@@ -1,0 +1,43 @@
+{
+  "properties": {
+    "Tags": [
+      "Stoway"
+    ],
+    "WorldPivotData": {
+      "OptionalCFrame": {
+        "position": [
+          -10.59,
+          0.180017,
+          -13.13
+        ],
+        "orientation": [
+          [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          [
+            1.0,
+            0.0,
+            0.0
+          ]
+        ]
+      }
+    },
+    "TextureContent": "rbxassetid://8991270939"
+  },
+  "attributes": {
+    "Amount": 1.0,
+    "Description": "",
+    "Droppable": true,
+    "IsGamepass": false,
+    "Rarity": "uncommon",
+    "Type": "material"
+  },
+  "className": "Tool"
+}

@@ -1,0 +1,72 @@
+{
+  "properties": {
+    "CanBeDropped": false,
+    "Tags": [
+      "Stoway"
+    ],
+    "Grip": [
+      0.0,
+      0.0,
+      1.4201374053955078,
+      1.0,
+      3.352760558072987e-8,
+      -1.2665977067172207e-7,
+      -3.352759847530251e-8,
+      1.0,
+      7.823103231885398e-8,
+      1.2665977067172207e-7,
+      -7.823102521342662e-8,
+      1.0
+    ],
+    "TextureContent": "rbxassetid://9359130096",
+    "WorldPivotData": {
+      "OptionalCFrame": {
+        "position": [
+          10.41,
+          1.500014,
+          14.87
+        ],
+        "orientation": [
+          [
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      }
+    },
+    "ModelMeshCFrame": [
+      -8.0,
+      0.0,
+      14.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  },
+  "attributes": {
+    "Amount": 1.0,
+    "Description": "",
+    "Droppable": true,
+    "IsGamepass": false,
+    "Rarity": "lengendary",
+    "Type": "material"
+  },
+  "className": "Tool"
+}

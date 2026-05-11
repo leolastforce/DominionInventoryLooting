@@ -1,0 +1,11 @@
+[package]
+name = "leona/vomcommissioninventorylooting"
+version = "0.1.0"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+
+[dependencies]
+fusion = "acecateer/fusion@0.3.1"
+Promise = "evaera/promise@4.0.0"
+Janitor = "howmanysmall/janitor@1.18.3"
+TypedPromise = "howmanysmall/typed-promise@4.0.6"
