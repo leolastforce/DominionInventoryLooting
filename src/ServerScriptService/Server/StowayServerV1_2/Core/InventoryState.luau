@@ -13,39 +13,39 @@ export type ItemInstance = {
 	UUID: string,
 	Id: string,
 	Amount: number,
-	Metadata: { [string]: any }?
+	Metadata: { [string]: any }?,
 }
 
 export type PlayerSettings = {
-	Limit: number,             -- Weight limit (0 = infinite)
-	CanStack: boolean,         -- Allow stacking
-	MaxStackSize: number,      -- Max items per stack
-	MaxHotbarSlots: number,    -- Number of hotbar slots
-	Droppable: boolean,        -- Allow dropping
-	UiType: string, 		   -- Interface version to load (default, admin, mod, developer, content, spec, etc)
+	Limit: number, -- Weight limit (0 = infinite)
+	CanStack: boolean, -- Allow stacking
+	MaxStackSize: number, -- Max items per stack
+	MaxHotbarSlots: number, -- Number of hotbar slots
+	Droppable: boolean, -- Allow dropping
+	UiType: string, -- Interface version to load (default, admin, mod, developer, content, spec, etc)
 }
 
 export type InventoryStateType = {
 	Player: Player,
-	Items: { [string]: ItemInstance },      -- UUID -> Item
-	ItemsByID: { [string]: { string } },    -- ItemId -> Array of UUIDs (for stacking lookup)
-	Hotbar: { [number]: string? },          -- Slot -> UUID (Static: nil holes allowed)
-	Storage: { string },                     -- Array of UUIDs (Dynamic: packed, no holes)
-	EquippedItemUUID: string?,              -- UUID of currently equipped item
-	Equipment: {                            -- Dedicated equipment slots
+	Items: { [string]: ItemInstance }, -- UUID -> Item
+	ItemsByID: { [string]: { string } }, -- ItemId -> Array of UUIDs (for stacking lookup)
+	Hotbar: { [number]: string? }, -- Slot -> UUID (Static: nil holes allowed)
+	Storage: { string }, -- Array of UUIDs (Dynamic: packed, no holes)
+	EquippedItemUUID: string?, -- UUID of currently equipped item
+	Equipment: { -- Dedicated equipment slots
 		Armor: {
-			Head: string?,                  -- UUID
+			Head: string?, -- UUID
 			Body: string?,
 			Leggings: string?,
 			Backpack: string?,
 		},
 		Weapons: {
-			Primary: string?,               -- UUID
+			Primary: string?, -- UUID
 			Secondary: string?,
 		},
 	},
-	Weight: number,                          -- Total item count (sum of all stack amounts)
-	Settings: PlayerSettings,               -- Per-player settings (modifiable!)
+	Weight: number, -- Total item count (sum of all stack amounts)
+	Settings: PlayerSettings, -- Per-player settings (modifiable!)
 }
 
 --// Constructor
@@ -71,7 +71,7 @@ function InventoryState.new(player: Player): InventoryStateType
 	}
 	self.Weight = 0
 	self.died = false
-	
+
 	-- Per-player settings (defaults from Config)
 	self.Settings = {
 		Droppable = Settings.Gameplay.Droppable,
@@ -79,9 +79,9 @@ function InventoryState.new(player: Player): InventoryStateType
 		CanStack = Settings.Storage.CanStack,
 		MaxStackSize = Settings.Storage.MaxStackSize,
 		MaxHotbarSlots = Settings.Hotbar.MaxSlots,
-		UiType = "Default"
+		UiType = "Default",
 	}
-	
+
 	return self
 end
 
@@ -103,4 +103,3 @@ function InventoryState:IsEquipped(uuid: string): boolean
 end
 
 return InventoryState
-

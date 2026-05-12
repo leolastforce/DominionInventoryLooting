@@ -10,7 +10,7 @@ export type EquipWeaponResult = {
 	success: boolean,
 	reason: string?,
 	previousUUID: string?,
-	currentUUID: string?
+	currentUUID: string?,
 }
 
 --// Equip weapon by UUID
@@ -19,30 +19,30 @@ function EquipWeaponOperation.Equip(state: any, player: Player, uuid: string, sl
 	if not item then
 		return { success = false, reason = "ITEM_NOT_FOUND" }
 	end
-	
+
 	-- Check if item is weapon and matches slot
 	local metadata = item.Metadata or {}
 	if metadata.ItemType ~= "Weapon" or metadata.WeaponSlot ~= slotType then
 		return { success = false, reason = "INVALID_ITEM_FOR_SLOT" }
 	end
-	
+
 	local previousUUID = state.Equipment.Weapons[slotType]
-	
+
 	-- Unequip current if different
 	if previousUUID and previousUUID ~= uuid then
 		EquipWeaponOperation.Unequip(state, player, slotType)
 	end
-	
+
 	-- Set equipped
 	state.Equipment.Weapons[slotType] = uuid
-	
+
 	-- If equipping Primary, also equip the tool
 	if slotType == "Primary" then
 		EquipOperation.Equip(state, player, uuid)
 	end
-	
+
 	-- TODO: Apply weapon benefits (e.g., damage stats) - implement in separate gameplay scripts
-	
+
 	return { success = true, previousUUID = previousUUID, currentUUID = uuid }
 end
 
@@ -51,19 +51,19 @@ function EquipWeaponOperation.Unequip(state: any, player: Player, slotType: stri
 	if not state.Equipment.Weapons[slotType] then
 		return { success = false, reason = "NOTHING_EQUIPPED" }
 	end
-	
+
 	local previousUUID = state.Equipment.Weapons[slotType]
-	
+
 	-- Clear equipped state
 	state.Equipment.Weapons[slotType] = nil
-	
+
 	-- If unequipping Primary, also unequip the tool
 	if slotType == "Primary" then
 		EquipOperation.Unequip(state, player)
 	end
-	
+
 	-- TODO: Remove weapon benefits - implement in separate gameplay scripts
-	
+
 	return { success = true, previousUUID = previousUUID, currentUUID = nil }
 end
 
@@ -71,7 +71,7 @@ end
 function EquipWeaponOperation.Cycle(state: any, player: Player, direction: number): EquipWeaponResult
 	local weapons = state.Equipment.Weapons
 	local weaponOrder = { "Primary", "Secondary" }
-	
+
 	-- Find current equipped weapon slot
 	local currentSlot = nil
 	if state.EquippedItemUUID then
@@ -82,7 +82,7 @@ function EquipWeaponOperation.Cycle(state: any, player: Player, direction: numbe
 			end
 		end
 	end
-	
+
 	-- Determine next slot
 	local nextSlot
 	if not currentSlot then
@@ -95,7 +95,7 @@ function EquipWeaponOperation.Cycle(state: any, player: Player, direction: numbe
 			nextSlot = weaponOrder[(currentIndex - 2) % #weaponOrder + 1]
 		end
 	end
-	
+
 	-- Equip next weapon if available
 	local nextUUID = weapons[nextSlot]
 	if nextUUID then

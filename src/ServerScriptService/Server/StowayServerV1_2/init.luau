@@ -46,11 +46,12 @@ local function OnPlayerAdded(player: Player)
 	PlayerInventories[player] = state
 
 	player.CharacterAdded:Connect(function(char)
-
-		char:FindFirstChildWhichIsA("Humanoid").Died:Once(function() state.died = true end)
+		char:FindFirstChildWhichIsA("Humanoid").Died:Once(function()
+			state.died = true
+		end)
 
 		if state.died then
-			InventoryService.ReloadClient(player, {configSettingName = state.Settings.UiType, RefreshData = false})
+			InventoryService.ReloadClient(player, { configSettingName = state.Settings.UiType, RefreshData = false })
 
 			if state.EquippedItemUUID then
 				local slotType, index = SlotManager.FindSlotByUUID(state, state.EquippedItemUUID)
@@ -88,8 +89,12 @@ end
 
 function InventoryService.AddItem(player: Player, itemId: string, amount: number, metadata: any?, REPLICATE: boolean)
 	local state = PlayerInventories[player]
-	if not state then return { success = false, reason = "NO_INVENTORY" } end
-	if not ServerStorage.Tools:FindFirstChild(itemId) then return { success = false, reason = "ITEM_NOT_FOUND" } end
+	if not state then
+		return { success = false, reason = "NO_INVENTORY" }
+	end
+	if not ServerStorage.Tools:FindFirstChild(itemId) then
+		return { success = false, reason = "ITEM_NOT_FOUND" }
+	end
 
 	local result = AddOperation.Execute(state, itemId, amount, metadata)
 
@@ -114,7 +119,9 @@ end
 
 function InventoryService.RemoveItem(player: Player, uuid: string, amount: number?, REPLICATE: boolean)
 	local state = PlayerInventories[player]
-	if not state then return { success = false, reason = "NO_INVENTORY" } end
+	if not state then
+		return { success = false, reason = "NO_INVENTORY" }
+	end
 
 	local result = RemoveOperation.Execute(state, uuid, amount)
 
@@ -131,13 +138,24 @@ function InventoryService.RemoveItem(player: Player, uuid: string, amount: numbe
 	return result
 end
 
-function InventoryService.SwapSlots(player: Player, fromType: string, fromSlot: number, toType: string, toSlot: number, REPLICATE: boolean)
+function InventoryService.SwapSlots(
+	player: Player,
+	fromType: string,
+	fromSlot: number,
+	toType: string,
+	toSlot: number,
+	REPLICATE: boolean
+)
 	local state = PlayerInventories[player]
-	if not state then return { success = false, reason = "NO_INVENTORY" } end
+	if not state then
+		return { success = false, reason = "NO_INVENTORY" }
+	end
 
 	local result = SwapOperation.ExecuteRaw(state, fromType, fromSlot, toType, toSlot)
 
-	if not result.success then return {success = false, reason = "Server error while swapping"} end
+	if not result.success then
+		return { success = false, reason = "Server error while swapping" }
+	end
 
 	if result.success and REPLICATE then
 		if result.hotbarCompacted then
@@ -152,10 +170,12 @@ end
 
 function InventoryService.EquipSlot(player: Player, slotType: string, slot: number, REPLICATE: boolean)
 	local state = PlayerInventories[player]
-	if not state then return { success = false, reason = "NO_INVENTORY" } end
-	 if slotType ~= "Hotbar" then
-        return { success = false, reason = "BACKPACK_EQUIP_DISABLED" }
-    end
+	if not state then
+		return { success = false, reason = "NO_INVENTORY" }
+	end
+	if slotType ~= "Hotbar" then
+		return { success = false, reason = "BACKPACK_EQUIP_DISABLED" }
+	end
 
 	local result = EquipOperation.EquipBySlot(state, player, slotType, slot)
 
@@ -168,7 +188,9 @@ end
 
 function InventoryService.UnequipSlot(player: Player, REPLICATE: boolean)
 	local state = PlayerInventories[player]
-	if not state then return { success = false, reason = "NO_INVENTORY" } end
+	if not state then
+		return { success = false, reason = "NO_INVENTORY" }
+	end
 
 	local result = EquipOperation.Unequip(state, player)
 
@@ -181,7 +203,9 @@ end
 
 function InventoryService.EquipArmor(player: Player, uuid: string, slotType: string, REPLICATE: boolean)
 	local state = PlayerInventories[player]
-	if not state then return { success = false, reason = "NO_INVENTORY" } end
+	if not state then
+		return { success = false, reason = "NO_INVENTORY" }
+	end
 
 	local result = EquipArmorOperation.Equip(state, player, uuid, slotType)
 
@@ -194,7 +218,9 @@ end
 
 function InventoryService.UnequipArmor(player: Player, slotType: string, REPLICATE: boolean)
 	local state = PlayerInventories[player]
-	if not state then return { success = false, reason = "NO_INVENTORY" } end
+	if not state then
+		return { success = false, reason = "NO_INVENTORY" }
+	end
 
 	local result = EquipArmorOperation.Unequip(state, player, slotType)
 
@@ -207,7 +233,9 @@ end
 
 function InventoryService.EquipWeapon(player: Player, uuid: string, slotType: string, REPLICATE: boolean)
 	local state = PlayerInventories[player]
-	if not state then return { success = false, reason = "NO_INVENTORY" } end
+	if not state then
+		return { success = false, reason = "NO_INVENTORY" }
+	end
 
 	local result = EquipWeaponOperation.Equip(state, player, uuid, slotType)
 
@@ -221,7 +249,9 @@ end
 
 function InventoryService.UnequipWeapon(player: Player, slotType: string, REPLICATE: boolean)
 	local state = PlayerInventories[player]
-	if not state then return { success = false, reason = "NO_INVENTORY" } end
+	if not state then
+		return { success = false, reason = "NO_INVENTORY" }
+	end
 
 	local result = EquipWeaponOperation.Unequip(state, player, slotType)
 
@@ -235,7 +265,9 @@ end
 
 function InventoryService.CycleWeapons(player: Player, direction: number, REPLICATE: boolean)
 	local state = PlayerInventories[player]
-	if not state then return { success = false, reason = "NO_INVENTORY" } end
+	if not state then
+		return { success = false, reason = "NO_INVENTORY" }
+	end
 
 	local result = EquipWeaponOperation.Cycle(state, player, direction)
 
@@ -249,7 +281,9 @@ end
 
 function InventoryService.DropItem(player: Player, slotType: string, slot: number, amount: number?, REPLICATE: boolean)
 	local state = PlayerInventories[player]
-	if not state then return { success = false, reason = "NO_INVENTORY" } end
+	if not state then
+		return { success = false, reason = "NO_INVENTORY" }
+	end
 
 	local result = DropOperation.Execute(state, player, slotType, slot, amount)
 
@@ -268,10 +302,14 @@ end
 
 function InventoryService.UpdateMetadata(player: Player, uuid: string, updates: { [string]: any }, REPLICATE: boolean)
 	local state = PlayerInventories[player]
-	if not state then return false end
+	if not state then
+		return false
+	end
 
 	local item = state.Items[uuid]
-	if not item then return false end
+	if not item then
+		return false
+	end
 
 	if not item.Metadata then
 		item.Metadata = {}
@@ -281,7 +319,9 @@ function InventoryService.UpdateMetadata(player: Player, uuid: string, updates: 
 		item.Metadata[k] = v
 	end
 
-	if REPLICATE then Replicator.SendUpdateMeta(player, uuid, updates, state.Weight) end
+	if REPLICATE then
+		Replicator.SendUpdateMeta(player, uuid, updates, state.Weight)
+	end
 	return true
 end
 
@@ -292,11 +332,15 @@ function InventoryService.SyncSettings(player: Player)
 	end
 end
 
-function InventoryService.ReloadClient(player: Player, config: { configSettingName: string,  RefreshData: boolean? })
+function InventoryService.ReloadClient(player: Player, config: { configSettingName: string, RefreshData: boolean? })
 	local state = PlayerInventories[player]
 	local UiType = Settings.DifferentUIs[config.configSettingName]
-	if not state then return { success = false, reason = "NO_INVENTORY" } end
-	if not UiType then return { success = false, reason = `NO UI CALLED {config.configSettingName}`} end
+	if not state then
+		return { success = false, reason = "NO_INVENTORY" }
+	end
+	if not UiType then
+		return { success = false, reason = `NO UI CALLED {config.configSettingName}` }
+	end
 
 	state.Settings.UiType = config.configSettingName
 	Replicator.SendReload(player, config.configSettingName, state)
@@ -305,9 +349,18 @@ end
 
 --// Stack two slots together (for drag-and-drop stacking)
 --// Drags item A onto item B -> B absorbs as much as possible, A keeps remainder
-function InventoryService.StackTwoSlots(player: Player, fromType: string, fromSlot: number, toType: string, toSlot: number, REPLICATE: boolean)
+function InventoryService.StackTwoSlots(
+	player: Player,
+	fromType: string,
+	fromSlot: number,
+	toType: string,
+	toSlot: number,
+	REPLICATE: boolean
+)
 	local state = PlayerInventories[player]
-	if not state then return { success = false, reason = "NO_INVENTORY" } end
+	if not state then
+		return { success = false, reason = "NO_INVENTORY" }
+	end
 
 	-- Check if stacking is enabled
 	if not state.Settings.CanStack then
@@ -354,27 +407,39 @@ function InventoryService.StackTwoSlots(player: Player, fromType: string, fromSl
 	end
 
 	-- Replicate
-	if REPLICATE then Replicator.SendInit(player, state) end
+	if REPLICATE then
+		Replicator.SendInit(player, state)
+	end
 
 	return {
 		success = true,
 		transferred = transfer,
 		fromRemaining = fromItem.Amount,
-		toAmount = toItem.Amount
+		toAmount = toItem.Amount,
 	}
 end
 
 --// Add item directly to backpack (bypasses hotbar-first logic)
-function InventoryService.AddToBackpack(player: Player, itemId: string, amount: number?, metadata: any?, REPLICATE: boolean)
+function InventoryService.AddToBackpack(
+	player: Player,
+	itemId: string,
+	amount: number?,
+	metadata: any?,
+	REPLICATE: boolean
+)
 	local state = PlayerInventories[player]
-	if not state then return { success = false, reason = "NO_INVENTORY" } end
+	if not state then
+		return { success = false, reason = "NO_INVENTORY" }
+	end
 
 	-- Check if backpack is enabled
 	if not Settings.Storage.BackpackEnabled then
 		return { success = false, reason = "BACKPACK_DISABLED" }
 	end
 
-	if not ServerStorage.Tools:FindFirstChild(itemId) then return { success = false, reason = "ITEM_NOT_FOUND" } end
+	if not ServerStorage.Tools:FindFirstChild(itemId) then
+		return { success = false, reason = "ITEM_NOT_FOUND" }
+	end
 
 	local normalizedMetadata = nil
 	local metadataAmount = nil
@@ -436,7 +501,7 @@ function InventoryService.AddToBackpack(player: Player, itemId: string, amount: 
 				UUID = uuid,
 				Id = itemId,
 				Amount = newAmount,
-				Metadata = finalMetadata or {}
+				Metadata = finalMetadata or {},
 			}
 
 			-- Add to Items
@@ -477,7 +542,7 @@ function InventoryService.AddToBackpack(player: Player, itemId: string, amount: 
 		addedItems = addedItems,
 		addedAmount = addedAmount,
 		overflow = finalAmount,
-		reason = finalAmount > 0 and "PARTIAL" or nil
+		reason = finalAmount > 0 and "PARTIAL" or nil,
 	}
 end
 

@@ -5,15 +5,15 @@ local Actions = {}
 
 --// Action Types
 Actions.Types = {
-	INIT = "Init",           -- Full state sync (join/respawn)
-	ADD = "Add",             -- Item added
-	REMOVE = "Remove",       -- Item removed
-	SWAP = "Swap",           -- Slots swapped
-	EQUIP = "Equip",         -- Equipped item changed
+	INIT = "Init", -- Full state sync (join/respawn)
+	ADD = "Add", -- Item added
+	REMOVE = "Remove", -- Item removed
+	SWAP = "Swap", -- Slots swapped
+	EQUIP = "Equip", -- Equipped item changed
 	UPDATE_EQUIPMENT = "UpdateEquipment", -- Equipment slots updated
 	UPDATE_META = "UpdateMeta", -- Item metadata updated
 	UPDATE_SETTINGS = "UpdateSettings", -- Settings updated
-	RELOAD = "Reload",       -- Reload client interface/config
+	RELOAD = "Reload", -- Reload client interface/config
 }
 
 --// Payload Builders
@@ -25,7 +25,7 @@ function Actions.Init(state: any)
 		EquippedUUID = state.EquippedItemUUID,
 		Equipment = state.Equipment,
 		Weight = state.Weight,
-		Settings = state.Settings
+		Settings = state.Settings,
 	}
 end
 
@@ -33,10 +33,10 @@ function Actions.UpdateEquipment(equipment: any)
 	return equipment
 end
 
-function Actions.Reload(uiType:string, data: any?)
+function Actions.Reload(uiType: string, data: any?)
 	return {
 		UiType = uiType,
-		Data = data
+		Data = data,
 	}
 end
 
@@ -48,7 +48,7 @@ function Actions.Add(addedItems: { { uuid: string, slotType: string, slot: numbe
 			UUID = added.uuid,
 			SlotType = added.slotType,
 			Slot = added.slot,
-			Item = items[added.uuid]
+			Item = items[added.uuid],
 		})
 	end
 	return { Slots = slots }
@@ -58,14 +58,14 @@ function Actions.Remove(slotType: string, slot: number, uuid: string)
 	return {
 		UUID = uuid,
 		SlotType = slotType,
-		Slot = slot
+		Slot = slot,
 	}
 end
 
 function Actions.Swap(fromType: string, fromSlot: number, toType: string, toSlot: number)
 	return {
 		From = { Type = fromType, Slot = fromSlot },
-		To = { Type = toType, Slot = toSlot }
+		To = { Type = toType, Slot = toSlot },
 	}
 end
 
@@ -73,11 +73,11 @@ function Actions.Equip(uuid: string?)
 	return { UUID = uuid }
 end
 
-function Actions.UpdateMeta(uuid: string, updates: { [string]: any }, newWeight:number)
+function Actions.UpdateMeta(uuid: string, updates: { [string]: any }, newWeight: number)
 	return {
 		UUID = uuid,
 		Updates = updates,
-		NewWeight = newWeight
+		NewWeight = newWeight,
 	}
 end
 
