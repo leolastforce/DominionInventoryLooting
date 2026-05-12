@@ -148,7 +148,9 @@ function SlotFactory.Create(Scope: any, props: SlotProps)
 		end)
 
 		slotbutton.MouseButton1Click:Connect(function()
-			InventoryController.HandleEquipped(scope.peek(slotUUID), true)
+			if props.SlotType == "Hotbar" then
+				InventoryController.HandleEquipped(scope.peek(slotUUID), true)
+			end
 
 			if props.hookManager then
 				props.hookManager:Fire("OnSlotClick", props.SlotType, props.SlotIndex, scope.peek(slotUUID))

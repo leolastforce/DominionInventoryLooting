@@ -8,32 +8,32 @@ export type HotbarType = "Static" | "Dynamic"
 
 --// Hotbar Settings
 Settings.Hotbar = {
-	Type = "Static" :: HotbarType, -- Static: fixed slots with holes, Dynamic: packed array (perplayer setting)
-	MaxSlots = 10, -- (perplayer setting)
+	Type = "Static" :: HotbarType, -- Static is fixed slots with holes, Dynamic is packed array (perplayer setting)
+	MaxSlots = 8, -- Hotbar slots
 }
 
 --// Storage/Backpack Settings (Always Dynamic)
 Settings.Storage = {
-	Limit = 15,             -- Total weight limit (Hotbar + Storage combined) (perplayer setting)
-	CanStack = true, -- (perplayer setting)
-	Sorting = true, -- (global setting)
-	MaxStackSize = 5, -- (perplayer setting)
-	BackpackEnabled = true, -- (global setting)
-	SortOrder = "None" -- Name, Rarity, ItemType, None (global setting)
+	Limit = 28, -- Total weight limit (Hotbar + Storage combined)
+	CanStack = true, 
+	Sorting = true, 
+	MaxStackSize = 99, 
+	BackpackEnabled = true, 
+	SortOrder = "None" 
 }
 
 --// Stacking Rules
 Settings.Stacking = {
 	-- Fields that MUST match for items to stack
 	RequiredFields = { "Rarity", "Type" }, -- (global setting)
-	-- Rarities that can NEVER stack
-	Blacklist = { -- (global setting)
+	-- Rarities that can't stack
+	Blacklist = { 
 		["Legendary"] = true,
 		["Mythic"] = true,
 		["Special"] = true,
 	},
 
-	Rarity = true -- (global setting)
+	Rarity = false 
 }
 
 --// Gameplay Settings
@@ -45,28 +45,10 @@ Settings.Gameplay = { -- (global settings)
 
 Settings.DifferentUIs = {
 	Default = {
-		FolderName = "StowayGui",
-		GuiName = "Stoway",
+		FolderName = "DominionGui",
+		GuiName = "Inventory",
 		HookPresetName = "DefaultHooks"
 	},
-
-	Admin = {
-		FolderName = "StowayAdmin",
-		GuiName = "AdminGui",
-		HookPresetName = "AdminHooks"
-	},
-
-	Grass = {
-        FolderName = "StowayGrass",
-    	GuiName = "GrassUi",
-    	HookPresetName = "GrassHooks"
-	},
-
-	Metal = {
-        FolderName = "StowayMetal",
-    	GuiName = "MetalGUI",
-    	HookPresetName = "MetalHooks"
-	}
 }
 
 return Settings

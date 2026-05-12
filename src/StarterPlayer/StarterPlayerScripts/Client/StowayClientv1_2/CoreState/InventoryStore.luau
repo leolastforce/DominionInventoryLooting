@@ -13,6 +13,18 @@ local Store = {
     Hotbar = Scope:Value({}),       -- {[slotIndex] = uuid}
     Storage = Scope:Value({}),      -- {[slotIndex] = uuid} (Array or Dict)
     EquippedUUID = Scope:Value(nil),
+    Equipment = Scope:Value({       -- Dedicated equipment slots
+        Armor = {
+            Head = nil,
+            Body = nil,
+            Leggings = nil,
+            Backpack = nil,
+        },
+        Weapons = {
+            Primary = nil,
+            Secondary = nil,
+        },
+    }),
     Weight = Scope:Value(0),
     Settings = Scope:Value({}),     -- Static settings from server
 
@@ -40,6 +52,18 @@ function Store.Init(initialData)
     Store.Hotbar:set(initialData.Hotbar or {})
     Store.Storage:set(initialData.Storage or {})
     Store.EquippedUUID:set(initialData.EquippedUUID or initialData.EquippedItemUUID)
+    Store.Equipment:set(initialData.Equipment or {
+        Armor = {
+            Head = nil,
+            Body = nil,
+            Leggings = nil,
+            Backpack = nil,
+        },
+        Weapons = {
+            Primary = nil,
+            Secondary = nil,
+        },
+    })
 
     local weight = initialData.Weight
     if type(weight) ~= "number" then

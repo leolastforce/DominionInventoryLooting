@@ -18,6 +18,8 @@ local AddOperation = require(script.Operations.AddOperation)
 local RemoveOperation = require(script.Operations.RemoveOperation)
 local SwapOperation = require(script.Operations.SwapOperation)
 local EquipOperation = require(script.Operations.EquipOperation)
+local EquipArmorOperation = require(script.Operations.EquipArmorOperation)
+local EquipWeaponOperation = require(script.Operations.EquipWeaponOperation)
 local DropOperation = require(script.Operations.DropOperation)
 
 -- Replication
@@ -151,6 +153,9 @@ end
 function InventoryService.EquipSlot(player: Player, slotType: string, slot: number, REPLICATE: boolean)
 	local state = PlayerInventories[player]
 	if not state then return { success = false, reason = "NO_INVENTORY" } end
+	 if slotType ~= "Hotbar" then
+        return { success = false, reason = "BACKPACK_EQUIP_DISABLED" }
+    end
 
 	local result = EquipOperation.EquipBySlot(state, player, slotType, slot)
 
@@ -169,6 +174,74 @@ function InventoryService.UnequipSlot(player: Player, REPLICATE: boolean)
 
 	if result.success and REPLICATE then
 		Replicator.SendEquip(player, nil)
+	end
+
+	return result
+end
+
+function InventoryService.EquipArmor(player: Player, uuid: string, slotType: string, REPLICATE: boolean)
+	local state = PlayerInventories[player]
+	if not state then return { success = false, reason = "NO_INVENTORY" } end
+
+	local result = EquipArmorOperation.Equip(state, player, uuid, slotType)
+
+	if result.success and REPLICATE then
+		Replicator.SendUpdateEquipment(player, state.Equipment)
+	end
+
+	return result
+end
+
+function InventoryService.UnequipArmor(player: Player, slotType: string, REPLICATE: boolean)
+	local state = PlayerInventories[player]
+	if not state then return { success = false, reason = "NO_INVENTORY" } end
+
+	local result = EquipArmorOperation.Unequip(state, player, slotType)
+
+	if result.success and REPLICATE then
+		Replicator.SendUpdateEquipment(player, state.Equipment)
+	end
+
+	return result
+end
+
+function InventoryService.EquipWeapon(player: Player, uuid: string, slotType: string, REPLICATE: boolean)
+	local state = PlayerInventories[player]
+	if not state then return { success = false, reason = "NO_INVENTORY" } end
+
+	local result = EquipWeaponOperation.Equip(state, player, uuid, slotType)
+
+	if result.success and REPLICATE then
+		Replicator.SendUpdateEquipment(player, state.Equipment)
+		Replicator.SendEquip(player, result.currentUUID)
+	end
+
+	return result
+end
+
+function InventoryService.UnequipWeapon(player: Player, slotType: string, REPLICATE: boolean)
+	local state = PlayerInventories[player]
+	if not state then return { success = false, reason = "NO_INVENTORY" } end
+
+	local result = EquipWeaponOperation.Unequip(state, player, slotType)
+
+	if result.success and REPLICATE then
+		Replicator.SendUpdateEquipment(player, state.Equipment)
+		Replicator.SendEquip(player, nil)
+	end
+
+	return result
+end
+
+function InventoryService.CycleWeapons(player: Player, direction: number, REPLICATE: boolean)
+	local state = PlayerInventories[player]
+	if not state then return { success = false, reason = "NO_INVENTORY" } end
+
+	local result = EquipWeaponOperation.Cycle(state, player, direction)
+
+	if result.success and REPLICATE then
+		Replicator.SendUpdateEquipment(player, state.Equipment)
+		Replicator.SendEquip(player, result.currentUUID)
 	end
 
 	return result
@@ -420,6 +493,11 @@ local Operations = {
 	REMOVE = "Remove",
 	DROP = "Drop",
 	STACK = "Stack",
+	EQUIP_ARMOR = "EquipArmor",
+	UNEQUIP_ARMOR = "UnequipArmor",
+	EQUIP_WEAPON = "EquipWeapon",
+	UNEQUIP_WEAPON = "UnequipWeapon",
+	CYCLE_WEAPONS = "CycleWeapons",
 }
 
 -- Operation handlers
@@ -441,6 +519,21 @@ local OperationHandlers = {
 	end,
 	[Operations.STACK] = function(player, args)
 		return InventoryService.StackTwoSlots(player, args.fromType, args.fromSlot, args.toType, args.toSlot, false)
+	end,
+	[Operations.EQUIP_ARMOR] = function(player, args)
+		return InventoryService.EquipArmor(player, args.uuid, args.slotType, false)
+	end,
+	[Operations.UNEQUIP_ARMOR] = function(player, args)
+		return InventoryService.UnequipArmor(player, args.slotType, false)
+	end,
+	[Operations.EQUIP_WEAPON] = function(player, args)
+		return InventoryService.EquipWeapon(player, args.uuid, args.slotType, false)
+	end,
+	[Operations.UNEQUIP_WEAPON] = function(player, args)
+		return InventoryService.UnequipWeapon(player, args.slotType, false)
+	end,
+	[Operations.CYCLE_WEAPONS] = function(player, args)
+		return InventoryService.CycleWeapons(player, args.direction, false)
 	end,
 }
 

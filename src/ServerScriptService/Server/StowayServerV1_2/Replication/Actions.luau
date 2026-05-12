@@ -10,6 +10,7 @@ Actions.Types = {
 	REMOVE = "Remove",       -- Item removed
 	SWAP = "Swap",           -- Slots swapped
 	EQUIP = "Equip",         -- Equipped item changed
+	UPDATE_EQUIPMENT = "UpdateEquipment", -- Equipment slots updated
 	UPDATE_META = "UpdateMeta", -- Item metadata updated
 	UPDATE_SETTINGS = "UpdateSettings", -- Settings updated
 	RELOAD = "Reload",       -- Reload client interface/config
@@ -22,13 +23,14 @@ function Actions.Init(state: any)
 		Hotbar = state.Hotbar,
 		Storage = state.Storage,
 		EquippedUUID = state.EquippedItemUUID,
+		Equipment = state.Equipment,
 		Weight = state.Weight,
 		Settings = state.Settings
 	}
 end
 
-function Actions.UpdateSettings(settings: any)
-	return settings
+function Actions.UpdateEquipment(equipment: any)
+	return equipment
 end
 
 function Actions.Reload(uiType:string, data: any?)

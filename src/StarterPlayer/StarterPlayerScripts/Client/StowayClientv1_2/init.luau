@@ -1,4 +1,3 @@
--- src/client/StowayClientV1_2/ClientInventoryService.luau
 
 --modules
 local Players = game:GetService("Players")
@@ -77,10 +76,6 @@ function SetUpBinds()
 
             BackpackStuff.Visible = isMobile and isEnabled
 
-            -- If disabled or not mobile, ensure backpack is closed (optional, but good UX)
-            if not (isMobile and isEnabled) and BackpackFrame and BackpackFrame.Visible and UserInputService.PreferredInput == Enum.PreferredInput.Touch then
-                -- BackpackFrame.Visible = false -- Maybe don't force close if opened via other means, but safer to leave alone
-            end
         end
 
         updateBackpackStuffVisibility()
@@ -193,7 +188,7 @@ function BuildGui(UIVersion, FolderName, GuiName)
 
     return xpcall(
         function ()
-            DraggingGui = InventoryGui --GUIFOLDER:FindFirstChild("DraggingGui")
+            DraggingGui = InventoryGui 
             BackpackFrame = InventoryGui.Backpack
             HotbarFrame = InventoryGui.Hotbar
             ScrollingBackpack = BackpackFrame.ScrollingFrame
@@ -431,6 +426,10 @@ local NetworkHandlers = {
 
     Equip = function(payload)
         InventoryController.SetEquipped(payload.UUID, false)
+    end,
+
+    UpdateEquipment = function(payload)
+        Store.Equipment:set(payload)
     end,
 
     UpdateMeta = function(payload)

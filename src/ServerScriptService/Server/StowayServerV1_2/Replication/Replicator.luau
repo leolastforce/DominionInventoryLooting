@@ -77,6 +77,11 @@ function Replicator.SendUpdateMeta(player: Player, uuid: string, updates: { [str
 	Replicator.Send(player, Actions.Types.UPDATE_META, payload)
 end
 
+function Replicator.SendUpdateEquipment(player: Player, equipment: any)
+	local payload = Actions.UpdateEquipment(equipment)
+	Replicator.Send(player, Actions.Types.UPDATE_EQUIPMENT, payload)
+end
+
 --// Initial Sync Request Handling
 local InitialSyncRemote = GetRemote("AskForStoway", "RemoteFunction")
 

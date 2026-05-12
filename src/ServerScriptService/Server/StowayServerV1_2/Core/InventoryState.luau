@@ -32,6 +32,18 @@ export type InventoryStateType = {
 	Hotbar: { [number]: string? },          -- Slot -> UUID (Static: nil holes allowed)
 	Storage: { string },                     -- Array of UUIDs (Dynamic: packed, no holes)
 	EquippedItemUUID: string?,              -- UUID of currently equipped item
+	Equipment: {                            -- Dedicated equipment slots
+		Armor: {
+			Head: string?,                  -- UUID
+			Body: string?,
+			Leggings: string?,
+			Backpack: string?,
+		},
+		Weapons: {
+			Primary: string?,               -- UUID
+			Secondary: string?,
+		},
+	},
 	Weight: number,                          -- Total item count (sum of all stack amounts)
 	Settings: PlayerSettings,               -- Per-player settings (modifiable!)
 }
@@ -45,6 +57,18 @@ function InventoryState.new(player: Player): InventoryStateType
 	self.Hotbar = {}
 	self.Storage = {}
 	self.EquippedItemUUID = nil
+	self.Equipment = {
+		Armor = {
+			Head = nil,
+			Body = nil,
+			Leggings = nil,
+			Backpack = nil,
+		},
+		Weapons = {
+			Primary = nil,
+			Secondary = nil,
+		},
+	}
 	self.Weight = 0
 	self.died = false
 	
